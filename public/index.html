@@ -1,453 +1,454 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CougarCalc</title>
     <style>
-      :root {
-        --bg: #f4efe7;
-        --panel: #fffaf2;
-        --panel-border: #e3d8c4;
-        --text: #2f2a24;
-        --muted: #7a6b58;
-        --accent: #1E3A5F;
-        --accent-dark: #142c46;
-        --accent-soft: #d7e3f0;
-        --gold: #d99f2b;
-        --gold-dark: #b57f14;
-        --button: #fdf7eb;
-        --button-hover: #f4e7d4;
-      }
-
-      body {
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #f7f2e8 0%, #efe0c6 100%);
-        color: var(--text);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        margin: 0;
-        padding: 16px;
-        box-sizing: border-box;
-      }
-
-      .card {
-        background: var(--panel);
-        padding: 20px;
-        border-radius: 18px;
-        box-shadow: 0 10px 24px rgba(90, 58, 31, 0.16);
-        width: min(96vw, 420px);
-        border: 1px solid var(--panel-border);
-      }
-
-      .header {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) 108px;
-        gap: 12px;
-        align-items: start;
-        margin-bottom: 12px;
-      }
-
-      .header-text {
-        min-width: 0;
-      }
-
-      img {
-        width: 118px;
-        height: 118px;
-        object-fit: contain;
-        filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.2));
-        margin-top: 0;
-        align-self: stretch;
-      }
-
-      h1 {
-        margin: 0 0 6px;
-        font-size: 24px;
-        color: var(--accent);
-      }
-
-      .subtitle {
-        margin: 0;
-        color: var(--muted);
-        font-size: 14px;
-      }
-
-      .environment-badge {
-        display: inline-block;
-        margin-top: 6px;
-        padding: 4px 8px;
-        border-radius: 999px;
-        background: var(--accent-soft);
-        color: var(--accent);
-        font-size: 12px;
-        font-weight: bold;
-      }
-
-      .display {
-        background: #fffdf8;
-        border: 1px solid var(--panel-border);
-        border-radius: 10px;
-        padding: 12px;
-        margin-bottom: 12px;
-        min-height: 56px;
-        width: 100%;
-        box-sizing: border-box;
-      }
-
-      .formula {
-        font-size: 16px;
-        color: var(--muted);
-        margin-bottom: 6px;
-        min-height: 20px;
-      }
-
-      .result {
-        font-size: 24px;
-        font-weight: bold;
-        color: var(--accent-dark);
-      }
-
-      .persistence-status {
-        margin: 8px 0 0;
-        padding: 8px;
-        border: 1px solid var(--gold-dark);
-        border-radius: 8px;
-        background: #fff2cf;
-        color: #6b4a08;
-        font-size: 13px;
-        line-height: 1.35;
-      }
-
-      .persistence-status[hidden] {
-        display: none;
-      }
-
-      .layout {
-        display: grid;
-        grid-template-columns: 1fr 76px;
-        gap: 12px;
-      }
-
-      .keypad {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
-      }
-
-      .operators {
-        display: grid;
-        gap: 8px;
-      }
-
-      button {
-        padding: 12px;
-        border-radius: 10px;
-        border: 1px solid var(--panel-border);
-        font-size: 16px;
-        cursor: pointer;
-        background: var(--button);
-        color: var(--text);
-      }
-
-      button:hover {
-        background: var(--button-hover);
-      }
-
-      button:disabled {
-        cursor: not-allowed;
-        opacity: 0.55;
-      }
-
-      .action {
-        background: var(--accent);
-        color: white;
-        border: none;
-      }
-
-      .action:hover {
-        background: var(--accent-dark);
-      }
-
-      .operator {
-        background: var(--gold);
-        color: white;
-        border: none;
-      }
-
-      .operator:hover {
-        background: var(--gold-dark);
-      }
-
-      .history {
-        margin-top: 12px;
-        border-top: 1px solid var(--panel-border);
-        padding-top: 10px;
-      }
-
-      .history button {
-        width: 100%;
-        margin-top: 6px;
-        background: #fffdf8;
-      }
-
-      .history-list {
-        max-height: 90px;
-        overflow-y: auto;
-        font-size: 13px;
-        color: var(--muted);
-        margin-top: 6px;
-      }
+         :root {
+            --bg: #f4efe7;
+            --panel: #fffaf2;
+            --panel-border: #e3d8c4;
+            --text: #2f2a24;
+            --muted: #7a6b58;
+            --accent: #1E3A5F;
+            --accent-dark: #142c46;
+            --accent-soft: #d7e3f0;
+            --gold: #d99f2b;
+            --gold-dark: #b57f14;
+            --button: #fdf7eb;
+            --button-hover: #f4e7d4;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f7f2e8 0%, #efe0c6 100%);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+        
+        .card {
+            background: var(--panel);
+            padding: 20px;
+            border-radius: 18px;
+            box-shadow: 0 10px 24px rgba(90, 58, 31, 0.16);
+            width: min(96vw, 420px);
+            border: 1px solid var(--panel-border);
+        }
+        
+        .header {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 108px;
+            gap: 12px;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+        
+        .header-text {
+            min-width: 0;
+        }
+        
+        img {
+            width: 118px;
+            height: 118px;
+            object-fit: contain;
+            filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.2));
+            margin-top: 0;
+            align-self: stretch;
+        }
+        
+        h1 {
+            margin: 0 0 6px;
+            font-size: 24px;
+            color: var(--accent);
+        }
+        
+        .subtitle {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+        
+        .environment-badge {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .display {
+            background: #fffdf8;
+            border: 1px solid var(--panel-border);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 12px;
+            min-height: 56px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .formula {
+            font-size: 16px;
+            color: var(--muted);
+            margin-bottom: 6px;
+            min-height: 20px;
+        }
+        
+        .result {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-dark);
+        }
+        
+        .persistence-status {
+            margin: 8px 0 0;
+            padding: 8px;
+            border: 1px solid var(--gold-dark);
+            border-radius: 8px;
+            background: #fff2cf;
+            color: #6b4a08;
+            font-size: 13px;
+            line-height: 1.35;
+        }
+        
+        .persistence-status[hidden] {
+            display: none;
+        }
+        
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 76px;
+            gap: 12px;
+        }
+        
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        
+        .operators {
+            display: grid;
+            gap: 8px;
+        }
+        
+        button {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--panel-border);
+            font-size: 16px;
+            cursor: pointer;
+            background: var(--button);
+            color: var(--text);
+        }
+        
+        button:hover {
+            background: var(--button-hover);
+        }
+        
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
+        }
+        
+        .action {
+            background: var(--accent);
+            color: white;
+            border: none;
+        }
+        
+        .action:hover {
+            background: var(--accent-dark);
+        }
+        
+        .operator {
+            background: var(--gold);
+            color: white;
+            border: none;
+        }
+        
+        .operator:hover {
+            background: var(--gold-dark);
+        }
+        
+        .history {
+            margin-top: 12px;
+            border-top: 1px solid var(--panel-border);
+            padding-top: 10px;
+        }
+        
+        .history button {
+            width: 100%;
+            margin-top: 6px;
+            background: #fffdf8;
+        }
+        
+        .history-list {
+            max-height: 90px;
+            overflow-y: auto;
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 6px;
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <div class="card">
-      <div class="header">
-        <div class="header-text">
-          <h1>CougarCalc</h1>
-          <p class="subtitle">A classic calculator for quick math.</p>
-          <div id="environmentBadge" class="environment-badge">Checking environment…</div>
-          <div class="display">
-            <div id="formula" class="formula">0</div>
-            <div id="result" class="result">0</div>
-            <p
-              id="persistenceStatus"
-              class="persistence-status"
-              role="status"
-              aria-live="polite"
-              hidden
-            ></p>
-          </div>
-        </div>
-        <img src="/cougar-icon-v2.png" alt="CougarCalc logo" />
-      </div>
-
-      <div class="layout">
-        <div class="keypad">
-          <button data-value="7">7</button>
-          <button data-value="8">8</button>
-          <button data-value="9">9</button>
-          <button id="clear">C</button>
-          <button data-value="4">4</button>
-          <button data-value="5">5</button>
-          <button data-value="6">6</button>
-          <button id="backspace">⌫</button>
-          <button data-value="1">1</button>
-          <button data-value="2">2</button>
-          <button data-value="3">3</button>
-          <button data-value=".">.</button>
-          <button data-value="0">0</button>
-          <button data-value="00">00</button>
-          <button data-value="(">(</button>
-          <button data-value=")">)</button>
+        <div class="header">
+            <div class="header-text">
+                <h1>CougarCalc</h1>
+                <p class="subtitle">Learning Git and AWS in IS 404!</p>
+                <div id="environmentBadge" class="environment-badge">Checking environment…</div>
+                <div class="display">
+                    <div id="formula" class="formula">0</div>
+                    <div id="result" class="result">0</div>
+                    <p id="persistenceStatus" class="persistence-status" role="status" aria-live="polite" hidden></p>
+                </div>
+            </div>
+            <img src="/cougar-icon-v2.png" alt="CougarCalc logo" />
         </div>
 
-        <div class="operators">
-          <button class="operator" data-value="+">+</button>
-          <button class="operator" data-value="-">−</button>
-          <button class="operator" data-value="*">×</button>
-          <button class="operator" data-value="/">÷</button>
-          <button class="action" id="equals">=</button>
-        </div>
-      </div>
+        <div class="layout">
+            <div class="keypad">
+                <button data-value="7">7</button>
+                <button data-value="8">8</button>
+                <button data-value="9">9</button>
+                <button id="clear">C</button>
+                <button data-value="4">4</button>
+                <button data-value="5">5</button>
+                <button data-value="6">6</button>
+                <button id="backspace">⌫</button>
+                <button data-value="1">1</button>
+                <button data-value="2">2</button>
+                <button data-value="3">3</button>
+                <button data-value=".">.</button>
+                <button data-value="0">0</button>
+                <button data-value="00">00</button>
+                <button data-value="(">(</button>
+                <button data-value=")">)</button>
+            </div>
 
-      <div class="history">
-        <button id="historyToggle">History</button>
-        <div id="historyList" class="history-list"></div>
-      </div>
+            <div class="operators">
+                <button class="operator" data-value="+">+</button>
+                <button class="operator" data-value="-">−</button>
+                <button class="operator" data-value="*">×</button>
+                <button class="operator" data-value="/">÷</button>
+                <button class="action" id="equals">=</button>
+            </div>
+        </div>
+
+        <div class="history">
+            <button id="historyToggle">History</button>
+            <div id="historyList" class="history-list"></div>
+        </div>
     </div>
 
     <script src="/calculator-logic.js"></script>
     <script>
-      const formulaNode = document.getElementById('formula');
-      const resultNode = document.getElementById('result');
-      const historyList = document.getElementById('historyList');
-      const historyToggle = document.getElementById('historyToggle');
-      const clearButton = document.getElementById('clear');
-      const backspaceButton = document.getElementById('backspace');
-      const equalsButton = document.getElementById('equals');
-      const keypadButtons = document.querySelectorAll('[data-value]');
-      const display = document.querySelector('.display');
-      const environmentBadge = document.getElementById('environmentBadge');
-      const persistenceStatus = document.getElementById('persistenceStatus');
-      const {
-        appendValue: appendValueLogic,
-        formatResult,
-        beginNextExpression
-      } = window.CalculatorLogic;
+        const formulaNode = document.getElementById('formula');
+        const resultNode = document.getElementById('result');
+        const historyList = document.getElementById('historyList');
+        const historyToggle = document.getElementById('historyToggle');
+        const clearButton = document.getElementById('clear');
+        const backspaceButton = document.getElementById('backspace');
+        const equalsButton = document.getElementById('equals');
+        const keypadButtons = document.querySelectorAll('[data-value]');
+        const display = document.querySelector('.display');
+        const environmentBadge = document.getElementById('environmentBadge');
+        const persistenceStatus = document.getElementById('persistenceStatus');
+        const {
+            appendValue: appendValueLogic,
+            formatResult,
+            beginNextExpression
+        } = window.CalculatorLogic;
 
-      let formula = '0';
-      let historyVisible = true;
-      let justEvaluated = false;
-      let lastResult = null;
+        let formula = '0';
+        let historyVisible = true;
+        let justEvaluated = false;
+        let lastResult = null;
 
-      function updateDisplay() {
-        formulaNode.textContent = formula;
-        resultNode.textContent = '0';
-        persistenceStatus.hidden = true;
-        persistenceStatus.textContent = '';
-      }
-
-      function appendValue(value) {
-        if (justEvaluated) {
-          justEvaluated = false;
-          formula = beginNextExpression(lastResult, value);
-          lastResult = null;
-          updateDisplay();
-          return;
-        }
-
-        formula = appendValueLogic(formula, value);
-        updateDisplay();
-      }
-
-      function clearFormula() {
-        formula = '0';
-        justEvaluated = false;
-        lastResult = null;
-        updateDisplay();
-      }
-
-      function backspace() {
-        if (formula.length <= 1) {
-          formula = '0';
-        } else {
-          formula = formula.slice(0, -1);
-        }
-        updateDisplay();
-      }
-
-      function toggleHistory() {
-        historyVisible = !historyVisible;
-        historyList.style.display = historyVisible ? 'block' : 'none';
-        historyToggle.textContent = historyVisible ? 'Hide History' : 'History';
-      }
-
-      function renderHistory(history) {
-        historyList.replaceChildren();
-
-        if (history.length === 0) {
-          historyList.textContent = 'No calculations yet.';
-          return;
-        }
-
-        history.forEach((calculation) => {
-          const historyItem = document.createElement('div');
-          historyItem.textContent =
-            `${calculation.expression} = ${formatResult(calculation.result)}`;
-          historyList.appendChild(historyItem);
-        });
-      }
-
-      async function loadHistory() {
-        try {
-          const response = await fetch('/history');
-          if (!response.ok) {
-            throw new Error('History request failed.');
-          }
-
-          renderHistory(await response.json());
-        } catch (_error) {
-          historyList.textContent = 'History unavailable.';
-        }
-      }
-
-      function handleEquals() {
-        return equalsButton.click();
-      }
-
-      function handleKeyboardInput(event) {
-        const key = event.key;
-
-        if (key === 'Enter') {
-          event.preventDefault();
-          handleEquals();
-          return;
-        }
-
-        if (key === 'Backspace') {
-          event.preventDefault();
-          backspace();
-          return;
-        }
-
-        if (key === 'Escape' || key === 'Delete') {
-          event.preventDefault();
-          clearFormula();
-          return;
-        }
-
-        if (/^[0-9.+\-*/()]$/.test(key)) {
-          event.preventDefault();
-          appendValue(key);
-          return;
-        }
-      }
-
-      keypadButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-          appendValue(button.dataset.value);
-        });
-      });
-
-      clearButton.addEventListener('click', clearFormula);
-      backspaceButton.addEventListener('click', backspace);
-      historyToggle.addEventListener('click', toggleHistory);
-      historyList.style.display = 'block';
-      historyToggle.textContent = 'Hide History';
-      display.addEventListener('keydown', handleKeyboardInput);
-      display.setAttribute('tabindex', '0');
-
-      fetch('/environment')
-        .then((response) => response.json())
-        .then((data) => {
-          const environmentName =
-            data.environment.charAt(0).toUpperCase() + data.environment.slice(1);
-          environmentBadge.textContent = `Hosting: ${environmentName}`;
-        })
-        .catch(() => {
-          environmentBadge.textContent = 'Hosting: Unknown';
-        });
-
-      equalsButton.addEventListener('click', async () => {
-        equalsButton.disabled = true;
-
-        try {
-          const response = await fetch('/calculate', {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ expression: formula })
-          });
-
-          const data = await response.json();
-
-          if (!response.ok) {
-            resultNode.textContent = 'Error';
-            return;
-          }
-
-          const displayResult = formatResult(data.result);
-          resultNode.textContent = displayResult;
-          justEvaluated = true;
-          lastResult = displayResult;
-          if (data.saved === false) {
-            persistenceStatus.textContent = data.warning;
-            persistenceStatus.hidden = false;
-          } else {
-            persistenceStatus.textContent = '';
+        function updateDisplay() {
+            formulaNode.textContent = formula;
+            resultNode.textContent = '0';
             persistenceStatus.hidden = true;
-          }
-          await loadHistory();
-        } catch (_error) {
-          resultNode.textContent = 'Network Error';
-        } finally {
-          equalsButton.disabled = false;
+            persistenceStatus.textContent = '';
         }
-      });
 
-      loadHistory();
+        function appendValue(value) {
+            if (justEvaluated) {
+                justEvaluated = false;
+                formula = beginNextExpression(lastResult, value);
+                lastResult = null;
+                updateDisplay();
+                return;
+            }
+
+            formula = appendValueLogic(formula, value);
+            updateDisplay();
+        }
+
+        function clearFormula() {
+            formula = '0';
+            justEvaluated = false;
+            lastResult = null;
+            updateDisplay();
+        }
+
+        function backspace() {
+            if (formula.length <= 1) {
+                formula = '0';
+            } else {
+                formula = formula.slice(0, -1);
+            }
+            updateDisplay();
+        }
+
+        function toggleHistory() {
+            historyVisible = !historyVisible;
+            historyList.style.display = historyVisible ? 'block' : 'none';
+            historyToggle.textContent = historyVisible ? 'Hide History' : 'History';
+        }
+
+        function renderHistory(history) {
+            historyList.replaceChildren();
+
+            if (history.length === 0) {
+                historyList.textContent = 'No calculations yet.';
+                return;
+            }
+
+            history.forEach((calculation) => {
+                const historyItem = document.createElement('div');
+                historyItem.textContent =
+                    `${calculation.expression} = ${formatResult(calculation.result)}`;
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        async function loadHistory() {
+            try {
+                const response = await fetch('/history');
+                if (!response.ok) {
+                    throw new Error('History request failed.');
+                }
+
+                renderHistory(await response.json());
+            } catch (_error) {
+                historyList.textContent = 'History unavailable.';
+            }
+        }
+
+        function handleEquals() {
+            return equalsButton.click();
+        }
+
+        function handleKeyboardInput(event) {
+            const key = event.key;
+
+            if (key === 'Enter') {
+                event.preventDefault();
+                handleEquals();
+                return;
+            }
+
+            if (key === 'Backspace') {
+                event.preventDefault();
+                backspace();
+                return;
+            }
+
+            if (key === 'Escape' || key === 'Delete') {
+                event.preventDefault();
+                clearFormula();
+                return;
+            }
+
+            if (/^[0-9.+\-*/()]$/.test(key)) {
+                event.preventDefault();
+                appendValue(key);
+                return;
+            }
+        }
+
+        keypadButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                appendValue(button.dataset.value);
+            });
+        });
+
+        clearButton.addEventListener('click', clearFormula);
+        backspaceButton.addEventListener('click', backspace);
+        historyToggle.addEventListener('click', toggleHistory);
+        historyList.style.display = 'block';
+        historyToggle.textContent = 'Hide History';
+        display.addEventListener('keydown', handleKeyboardInput);
+        display.setAttribute('tabindex', '0');
+
+        fetch('/environment')
+            .then((response) => response.json())
+            .then((data) => {
+                const environmentName =
+                    data.environment.charAt(0).toUpperCase() + data.environment.slice(1);
+                environmentBadge.textContent = `Hosting: ${environmentName}`;
+            })
+            .catch(() => {
+                environmentBadge.textContent = 'Hosting: Unknown';
+            });
+
+        equalsButton.addEventListener('click', async() => {
+            equalsButton.disabled = true;
+
+            try {
+                const response = await fetch('/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        expression: formula
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    resultNode.textContent = 'Error';
+                    return;
+                }
+
+                const displayResult = formatResult(data.result);
+                resultNode.textContent = displayResult;
+                justEvaluated = true;
+                lastResult = displayResult;
+                if (data.saved === false) {
+                    persistenceStatus.textContent = data.warning;
+                    persistenceStatus.hidden = false;
+                } else {
+                    persistenceStatus.textContent = '';
+                    persistenceStatus.hidden = true;
+                }
+                await loadHistory();
+            } catch (_error) {
+                resultNode.textContent = 'Network Error';
+            } finally {
+                equalsButton.disabled = false;
+            }
+        });
+
+        loadHistory();
     </script>
-  </body>
+</body>
+
 </html>
